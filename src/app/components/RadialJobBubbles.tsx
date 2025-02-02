@@ -52,22 +52,34 @@ export default function RadialJobBubbles({ jobs }: RadialJobBubblesProps) {
   const [positions, setPositions] = useState<Array<{ x: number; y: number }>>([]);
 
   const calculatePositions = (total: number) => {
-    const positions = [];
-    const RADIUS = 250;
-    const SPACING_ANGLE = (2 * Math.PI) / (total - 1);
+    const positions: Array<{ x: number; y: number }> = [];
+    const SPACING_X = 180; // Horizontal spacing between bubbles
+    const SPACING_Y = 120; // Vertical spacing between rows
     
-    for (let i = 0; i < total; i++) {
-      if (i === 0) {
-        positions.push({ x: 0, y: 0 });
-        continue;
-      }
+    // Define the pattern layout
+    const pattern = [
+      [0, 1, 2],           // Top row
+      [-1, 3, 4, 5, -1],   // Middle row (with padding)
+      [6, 7, 8]            // Bottom row
+    ];
 
-      const angle = (i - 1) * SPACING_ANGLE - Math.PI / 2;
-      positions.push({
-        x: Math.cos(angle) * RADIUS,
-        y: Math.sin(angle) * RADIUS,
+    // Calculate center position for each slot in the pattern
+    pattern.forEach((row, rowIndex) => {
+      row.forEach((slot, colIndex) => {
+        if (slot === -1) return; // Skip padding slots
+        if (slot >= total) return; // Skip if we don't have enough jobs
+
+        // Calculate center offsets for each row
+        const centerOffsetX = (row.length * SPACING_X) / 2;
+        const centerOffsetY = (pattern.length * SPACING_Y) / 2;
+
+        positions[slot] = {
+          x: colIndex * SPACING_X - centerOffsetX + (row.length < 5 ? SPACING_X / 2 : 0),
+          y: rowIndex * SPACING_Y - centerOffsetY
+        };
       });
-    }
+    });
+
     return positions;
   };
 
@@ -84,6 +96,7 @@ export default function RadialJobBubbles({ jobs }: RadialJobBubblesProps) {
 
   return (
     <div className="relative w-full h-[600px] flex items-center justify-center overflow-hidden">
+      {/* Main content */}
       <div 
         className={`relative w-[800px] h-[600px] transition-transform duration-300 ease-in-out
           ${selectedJob !== null ? '-translate-x-[200px]' : ''}`}
