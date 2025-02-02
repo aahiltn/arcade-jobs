@@ -12,3 +12,51 @@ datasource db {
   provider = "mongodb"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id        String   @id @map("_id")
+  firstName String
+  lastName  String
+  email     String   @unique
+  password  String?  // Make password optional by adding ?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  emails    Email[]
+  jobs      Job[]
+  // Add other user fields as needed
+}
+
+model Email {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  sender      String
+  subject     String
+  body        String
+  receivedAt  DateTime @default(now())
+  isRead      Boolean  @default(false)
+  attachments String[] // URLs to stored attachments
+  // Add other email fields as needed
+}
+
+model Job {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId        String
+  user          User     @relation(fields: [userId], references: [id])
+  company       String
+  position      String
+  status        String   @default("APPLIED") // e.g., APPLIED, INTERVIEW, OFFER, REJECTED
+  appliedDate   DateTime @default(now())
+  jobListingUrl String?
+  notes         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @default(now())
+  // Add other job application fields as needed
+}
+
+enum JobStatus {
+  APPLIED
+  INTERVIEW
+  OFFER
+  REJECTED
+}
