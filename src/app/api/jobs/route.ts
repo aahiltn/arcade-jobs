@@ -2,9 +2,12 @@ import { NextResponse } from "next/server";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
 import { DynamoDBDocumentClient, QueryCommand } from "@aws-sdk/lib-dynamodb";
 import { startOfDay, endOfDay } from "date-fns";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const client = new DynamoDBClient({
-  region: process.env.AWS_REGION,
+  region: process.env.REGION,
   credentials: {
     accessKeyId: process.env.ACCESS_AWS_KEY_ID!,
     secretAccessKey: process.env.SECRET_AWS_ACCESS_KEY!,
@@ -41,7 +44,17 @@ export async function GET(req: Request) {
       },
     });
 
-    const { Items: todaysEmails = [] } = await docClient.send(command);
+    // const simpleQuery = new QueryCommand({
+    //   TableName: "EmailSessionData",
+    //   KeyConditionExpression: "userId = :userId",
+    //   ExpressionAttributeValues: {
+    //     ":userId": "aahiltn",
+    //   },
+    // });
+
+    const { Items: todaysEmails = [] } = (await docClient.send(command)) || {
+      Items: [],
+    };
     const todaysEmailCount = todaysEmails.length;
 
     // Query all emails sorted by recency

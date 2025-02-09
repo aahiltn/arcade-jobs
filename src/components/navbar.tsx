@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { MapPin } from "lucide-react";
 
 export default function Navbar() {
   return (
@@ -17,10 +16,6 @@ export default function Navbar() {
         </Link>
         <nav className="flex flex-1 items-center space-x-6 text-sm font-medium"></nav>
         <div className="flex items-center space-x-4">
-          <Button variant="ghost" size="sm">
-            <MapPin className="mr-2 h-4 w-4" />
-            Plan a Trip
-          </Button>
           <Link href="/auth">
             <Button size="sm">Sign Up</Button>
           </Link>

@@ -4,7 +4,6 @@ import { Job } from "@/lib/types";
 
 export default function JobCard({ job }: { job: Job }) {
   const { keyEntities } = job;
-  console.log(keyEntities);
   let formattedEntities = keyEntities;
 
   // Handle new format if present
