@@ -4,21 +4,12 @@ import "./globals.css";
 import MouseMoveEffect from "@/components/mouse-move-effect";
 
 import { ClerkProvider } from "@clerk/nextjs";
-
-// const geistSans = Geist({
-//   variable: "--font-geist-sans",
-//   subsets: ["latin"],
-// });
+import Head from "next/head";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// const geistMono = Geist_Mono({
-//   variable: "--font-geist-mono",
-//   subsets: ["latin"],
-// });
-
 export const metadata: Metadata = {
-  title: "ArcadeJobs",
+  title: "Arcade Jobs",
   description: "Gamify your job search",
 };
 
@@ -30,6 +21,10 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" className="dark">
+        <Head>
+          {" "}
+          <link rel="icon" href="assets/arcade_icon.svg" />
+        </Head>
         <body
           className={`${inter.className} bg-background text-foreground antialiased`}
         >
