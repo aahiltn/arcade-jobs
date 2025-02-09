@@ -18,7 +18,6 @@ export default function Dashboard() {
 
   const [jobData, setJobData] = useState<Job[]>([]);
   const [todaysEmailCount, setTodaysEmailCount] = useState(0);
-  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     async function fetchEmailData() {
@@ -45,8 +44,6 @@ export default function Dashboard() {
         setTodaysEmailCount(data.todaysEmailCount);
       } catch (error) {
         console.error("Error fetching email session data:", error);
-      } finally {
-        setIsLoading(false);
       }
     }
 
